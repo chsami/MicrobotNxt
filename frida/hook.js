@@ -97,7 +97,7 @@ scanMatch(entryPattern, (addressPointer) => {
     try {
         Interceptor.attach(addressPointer, {
             onEnter(args) {
-                microbot.client = args[0]; // param_1
+                microbot.client = args[0];
                 microbot.playerIndex = microbot.client.add(0x6F4D0).readU32();
                 microbot.playerList = microbot.client.add(0x6c80).add(0x2008).readPointer();
             }
