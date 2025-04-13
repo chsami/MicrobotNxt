@@ -3,7 +3,9 @@ using System.Text.Json;
 using ImGuiDemo.Microbot;
 
 namespace ImGuiDemo;
-
+/// <summary>
+/// Listens to the frida hook.js script and handles events.
+/// </summary>
 public sealed class MicrobotHooks
 {
     public async Task Create()
@@ -93,7 +95,35 @@ public sealed class MicrobotHooks
             Console.WriteLine(ex.Message);
         }
     }
+    
+    /// <summary>
+    /// Find the npm executable in the system PATH.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    static string FindNpm()
+    {
+        var paths = Environment.GetEnvironmentVariable("PATH")?.Split(';') ?? Array.Empty<string>();
 
+        foreach (var path in paths)
+        {
+            var candidate = Path.Combine(path.Trim(), "npm.cmd");
+            if (File.Exists(candidate))
+            {
+                // Optional: filter out AppData shim if needed
+                if (!candidate.Contains("AppData"))
+                    return candidate;
+            }
+        }
+
+        throw new Exception("npm.cmd not found in PATH");
+    }
+    
+    /// <summary>
+    /// Ensure that npm dependencies are installed.
+    /// </summary>
+    /// <param name="fridaFolder"></param>
+    /// <exception cref="Exception"></exception>
     void EnsureNpmDependencies(string fridaFolder)
     {
         string nodeModulesPath = Path.Combine(fridaFolder, "node_modules");
@@ -106,11 +136,13 @@ public sealed class MicrobotHooks
 
         Console.WriteLine("node_modules not found. Running npm install...");
         
+        string npmPath = FindNpm();
+        
         var npmProcess = new Process
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName = "npm.cmd",
+                FileName = npmPath,
                 Arguments = "install",
                 WorkingDirectory = fridaFolder,
                 RedirectStandardOutput = true,

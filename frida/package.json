@@ -1,10 +1,9 @@
 {
   "name": "frida",
   "version": "1.0.0",
-  "description": "",
-  "main": "electron/main.js",
+  "description": "Hooking framework for osrs nxt client",
+  "main": "hook.js",
   "scripts": {
-    "start": "electron ."
   },
   "private": true,
   "dependencies": {
