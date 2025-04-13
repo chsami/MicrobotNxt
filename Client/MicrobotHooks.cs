@@ -29,6 +29,7 @@ public sealed class MicrobotHooks
         }
 
         EnsureNpmDependencies(fridaFolder);
+        ShutdownAllFridaProcesses();
         
         var process = new Process
         {
@@ -184,5 +185,31 @@ public sealed class MicrobotHooks
 
         Console.WriteLine($"Process '{processName}' not found within {timeoutMs / 1000} seconds.");
         throw new TimeoutException($"Process '{processName}' not found within {timeoutMs / 1000} seconds.");
+    }
+    
+    static bool IsFridaRunning()
+    {
+        return Process.GetProcessesByName("frida").Any();
+    }
+    /// <summary>
+    /// shutdown all frida processes before starting a new one
+    /// </summary>
+    static void ShutdownAllFridaProcesses()
+    {
+        var fridaProcesses = Process.GetProcessesByName("frida");
+
+        foreach (var process in fridaProcesses)
+        {
+            try
+            {
+                Console.WriteLine($"Shutting down PID {process.Id} ({process.ProcessName})");
+                process.Kill();
+                process.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to shutdown {process.Id}: {ex.Message}");
+            }
+        }
     }
 }

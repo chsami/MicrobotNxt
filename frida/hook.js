@@ -88,7 +88,7 @@ function scanAndMatchPattern(pattern, expectedInstructions, onMatch) {
 const mod = Process.getModuleByName('osclient.exe');
 const x64base = ptr('0x140000000');
 
-console.log(mod.base) // rev 230 = 0x7ff6509a0000
+console.log("Base = " + mod.base) // rev 230 = 0x7ff6509a0000
 
 //#region Entry point
 const entryPattern = '48 89 5c 24 10 48 89 4c 24 08 55 56 57 41 54 41 55 41 56 41 57 48 8d ac 24 00 fb'
