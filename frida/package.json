@@ -1,0 +1,14 @@
+{
+  "name": "frida",
+  "version": "1.0.0",
+  "description": "",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "private": true,
+  "dependencies": {
+    "frida": "^16.7.4",
+    "frida-tools": "^1.0.2"
+  }
+}
