@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
+﻿
 
-namespace WpfApp1.Microbot;
+namespace MicrobotNxt.Microbot;
 
 public static class OSClientProcess
 {
-    public static Process Process { get; set; }   
+    public static System.Diagnostics.Process Process { get; set; }   
 }

@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
-using ImGuiDemo.Microbot;
+using MicrobotNxt.Microbot;
 
-namespace ImGuiDemo;
+namespace MicrobotNxt;
+
 /// <summary>
 /// Listens to the frida hook.js script and handles events.
 /// </summary>
@@ -31,7 +32,7 @@ public sealed class MicrobotHooks
         EnsureNpmDependencies(fridaFolder);
         ShutdownAllFridaProcesses();
         
-        var process = new Process
+        var process = new System.Diagnostics.Process
         {
             StartInfo = new ProcessStartInfo
             {
@@ -68,10 +69,13 @@ public sealed class MicrobotHooks
             if (args.Data != null)
                 Console.WriteLine("[FRIDA ERR] " + args.Data);
         };
+        
 
         process.Start();
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
+
+
     }
 
     private void HandleGameEvents(string line)
@@ -89,7 +93,6 @@ public sealed class MicrobotHooks
                     Client.Player.Y = data.GetProperty("y").GetInt32();
                     break;
             }
-            
         }
         catch (Exception ex)
         {
@@ -139,7 +142,7 @@ public sealed class MicrobotHooks
         
         string npmPath = FindNpm();
         
-        var npmProcess = new Process
+        var npmProcess = new System.Diagnostics.Process
         {
             StartInfo = new ProcessStartInfo
             {
@@ -176,7 +179,7 @@ public sealed class MicrobotHooks
 
         while (DateTime.UtcNow - start < timeout)
         {
-            var found = Process.GetProcessesByName(processName).Length > 0;
+            var found = System.Diagnostics.Process.GetProcessesByName(processName).Length > 0;
             if (found)
                 return;
 
@@ -189,14 +192,14 @@ public sealed class MicrobotHooks
     
     static bool IsFridaRunning()
     {
-        return Process.GetProcessesByName("frida").Any();
+        return System.Diagnostics.Process.GetProcessesByName("frida").Any();
     }
     /// <summary>
     /// shutdown all frida processes before starting a new one
     /// </summary>
     static void ShutdownAllFridaProcesses()
     {
-        var fridaProcesses = Process.GetProcessesByName("frida");
+        var fridaProcesses = System.Diagnostics.Process.GetProcessesByName("frida");
 
         foreach (var process in fridaProcesses)
         {

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace ImGuiDemo;
+namespace MicrobotNxt;
 
 static class Win32
 {

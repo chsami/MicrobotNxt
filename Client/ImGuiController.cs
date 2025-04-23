@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using ImGuiNET;
 using Veldrid;
 
-namespace ImGuiDemo;
+namespace MicrobotNxt;
 
 /// <summary>
 /// A modified version of Veldrid.ImGui's ImGuiRenderer.

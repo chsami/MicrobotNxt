@@ -1,18 +1,17 @@
 ﻿using System.Diagnostics;
-using System.Net.Mime;
-using WpfApp1.Microbot;
+using MicrobotNxt.Microbot;
 
-namespace ImGuiDemo;
+namespace MicrobotNxt;
 
 public static class MicrobotLauncher
 {
-     // Various paths for RuneScape clients
+    // Various paths for RuneScape clients
     private static readonly string[] POSSIBLE_RUNESCAPE_PATHS = new[]
     {
         @"C:\Program Files (x86)\Jagex Launcher\Games\Old School RuneScape\Client\osclient.exe", // Official launcher
-        
     };
-     // Launch RuneScape client
+
+    // Launch RuneScape client
     private static async Task LaunchRuneScapeAsync()
     {
         // Try to find and start RuneScape
@@ -23,10 +22,11 @@ public static class MicrobotLauncher
             try
             {
                 // Check if RuneScape is already running
-                Process[] existingProcesses = Process.GetProcessesByName("RuneScape");
+                System.Diagnostics.Process[] existingProcesses =
+                    System.Diagnostics.Process.GetProcessesByName("RuneScape");
                 if (existingProcesses.Length == 0)
                 {
-                    existingProcesses = Process.GetProcessesByName("RuneLite");
+                    existingProcesses = System.Diagnostics.Process.GetProcessesByName("RuneLite");
                 }
 
                 if (existingProcesses.Length > 0)
@@ -40,7 +40,7 @@ public static class MicrobotLauncher
                     // Start RuneScape
                     ProcessStartInfo startInfo = new ProcessStartInfo(runescapePath);
                     startInfo.WorkingDirectory = Path.GetDirectoryName(runescapePath);
-                    OSClientProcess.Process = Process.Start(startInfo);
+                    OSClientProcess.Process = System.Diagnostics.Process.Start(startInfo);
                     Console.WriteLine($"Started RuneScape process from: {runescapePath}");
                 }
             }
@@ -71,12 +71,13 @@ public static class MicrobotLauncher
 
         return null;
     }
+
     public static void Launch()
-    { 
-        #if DEBUG
-            // you can’t reliably shutdown osrsclient when the debugger shuts down your app
-            Console.WriteLine("Debug mode is enabled. We are not launching the osrs client for you.");
-        #else
+    {
+#if DEBUG
+        // you can’t reliably shutdown osrsclient when the debugger shuts down your app
+        Console.WriteLine("Debug mode is enabled. We are not launching the osrs client for you.");
+#else
             // Start RuneScape
             LaunchRuneScapeAsync().GetAwaiter().GetResult();
         
@@ -88,9 +89,8 @@ public static class MicrobotLauncher
             {
                 ShutdownClient();
             };
-        #endif
-   
-        
+#endif
+
 
         Task.Run(() =>
         {
@@ -98,7 +98,6 @@ public static class MicrobotLauncher
 
             frida.Create().GetAwaiter().GetResult();
         });
-   
     }
 
     private static void ShutdownClient()
@@ -117,7 +116,7 @@ public static class MicrobotLauncher
         }
     }
 
-    
+
     static void MonitorOsrsClient()
     {
         Task.Run(() =>
@@ -130,6 +129,7 @@ public static class MicrobotLauncher
             {
                 // ignore
             }
+
             ShutdownClient();
             Environment.Exit(1);
         });
