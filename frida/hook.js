@@ -1,3 +1,4 @@
+//these will be reworked to offsets.js where the whole structure will be  laid out with all the offsets
 const microbot = {
     client: null,
     playerList: null,
